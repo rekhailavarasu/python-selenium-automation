@@ -11,4 +11,15 @@ class Page:
     def verify_text(self, actual_text):
         print(f'Verify {actual_text} ....')
 
-class MainPage:
+class MainPage(Page):
+    def open_main(self):
+        print('Opening main page ....')
+
+class LoginPage(Page):
+    def login(self):
+        print('Login')
+
+login_page = LoginPage()
+login_page.login()
+login_page.click()
+login_page.find_element()

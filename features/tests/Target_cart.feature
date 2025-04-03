@@ -2,10 +2,10 @@
 Feature: # Click on Target Cart
   # Checking “Your cart is empty” message when clicking on cart icon
 
-  Scenario: # Verifying “Your cart is empty” message
-#    Given Open target main page
-#    When Click on cart icon
-
+  Scenario: Verifying “Your cart is empty” message
+    Given Open target main page
+    When Click on cart icon
+    Then Verify  'Your cart is empty' message is shown
 
   Scenario: User can add a product to cart
     Given Open target main page
@@ -17,5 +17,5 @@ Feature: # Click on Target Cart
     And Confirm Add to Cart button from side navigation
     Then Verify cart has 1 item(s)
     Then Verify {link_amount} links shown
-    Then Verify  'Your cart is empty' message is shown
+    #Then Verify  'Your cart is empty' message is shown
     Then Verify correct search results shown for {expected_result}

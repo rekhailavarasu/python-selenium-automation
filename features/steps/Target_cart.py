@@ -6,13 +6,13 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-@given('Open target main page')
-def open_target_main(context):
-    driver_path = ChromeDriverManager().install()
-    context.driver = webdriver.Chrome(service=Service(driver_path))
-    context.driver.maximize_window()
-    context.driver.implicitly_wait(5)
-    context.driver.get('https://www.target.com/')
+# @given('Open target main page')
+# def open_target_main(context):
+#     driver_path = ChromeDriverManager().install()
+#     context.driver = webdriver.Chrome(service=Service(driver_path))
+#     context.driver.maximize_window()
+#     context.driver.implicitly_wait(5)
+#     context.driver.get('https://www.target.com/')
 
 @when('Click on cart icon')
 def cart_icon(context):
@@ -25,10 +25,10 @@ CART_ITEM_TITLE = (By.CSS_SELECTOR, "[data-test='cartItem-title']")
 Add_cart = (By.CSS_SELECTOR, '[data-test="content-wrapper"] [id*="addToCartButton"]')
 HEADER_LINKS = (By.CSS_SELECTOR, "[id*='utilityNav']")
 SIDE_NAV_PRODUCT_NAME = (By.CSS_SELECTOR, "[data-test='content-wrapper'] h4")
-CART_ICON = (By.CSS_SELECTOR, "[data-test='@web/CartLink']")
-search_result = (By.XPATH, "//div[@data-test='lp-resultsCount']")
-search_field = (By.ID, 'search')
-search_button = (By.XPATH, "//button[@data-test='@web/Search/SearchButton']")
+#CART_ICON = (By.CSS_SELECTOR, "[data-test='@web/CartLink']")
+#search_result = (By.XPATH, "//div[@data-test='lp-resultsCount']")
+#search_field = (By.ID, 'search')
+#search_button = (By.XPATH, "//button[@data-test='@web/Search/SearchButton']")
 
 # @when('Search for {search_word}')
 # def search_product(context, search_word):
@@ -40,9 +40,10 @@ search_button = (By.XPATH, "//button[@data-test='@web/Search/SearchButton']")
 
 @then('Click on Add to Cart button')
 def click_cart(context):
-    context.driver.wait.until(
-        EC.element_to_be_clickable(CART_ICON)
-    ).click()
+    context.app.header.click_cart()
+    # context.driver.wait.until(
+    #     EC.element_to_be_clickable(CART_ICON)
+    # ).click()
 
 @then('Store product name')
 def store_product_name(context):
@@ -93,23 +94,28 @@ def verify_all_header_links_shown(context, link_amount):
 
 @then("Verify  'Your cart is empty' message is shown")
 def verify_cart_empty(context):
-    actual_text = context.driver.find_element(By.CSS_SELECTOR, "[data-test='boxEmptyMsg']").text
-    expected_text = 'Your cart is empty'
-    assert expected_text in actual_text, f'Error. Text {expected_text} not in {actual_text}'
+    context.app.cart_page.verify_cart_empty()
+
+    # actual_text = context.driver.find_element(By.CSS_SELECTOR, "[data-test='boxEmptyMsg']").text
+    # expected_text = 'Your cart is empty'
+    # assert expected_text in actual_text, f'Error. Text {expected_text} not in {actual_text}'
 
 @then('Verify correct search results shown for {expected_result}')
 def verify_results_shown(context, expected_result):
-    try:
-        actual_results_text = context.driver.find_element(*search_result).text
-        print(f"Actual search results: {actual_results_text}")
+    context.app.search_results_page.verify_search_results()
 
-        # Clean the result text to get just the number (if it's in a format like "4,316 results")
-        actual_results = ''.join([char for char in actual_results_text if char.isdigit()])
 
-        print(f"Actual results (numeric): {actual_results}")
-
-        # Check if the expected result matches the actual results
-        assert expected_result in actual_results, f'Error, Text "{expected_result}" not found in "{actual_results_text}"'
-    except Exception as e:
-        print(f"Error verifying results: {e}")
-        raise
+    # try:
+    #     actual_results_text = context.driver.find_element(*search_result).text
+    #     print(f"Actual search results: {actual_results_text}")
+    #
+    #     # Clean the result text to get just the number (if it's in a format like "4,316 results")
+    #     actual_results = ''.join([char for char in actual_results_text if char.isdigit()])
+    #
+    #     print(f"Actual results (numeric): {actual_results}")
+    #
+    #     # Check if the expected result matches the actual results
+    #     assert expected_result in actual_results, f'Error, Text "{expected_result}" not found in "{actual_results_text}"'
+    # except Exception as e:
+    #     print(f"Error verifying results: {e}")
+    #     raise

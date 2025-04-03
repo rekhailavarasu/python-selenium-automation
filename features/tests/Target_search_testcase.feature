@@ -3,12 +3,12 @@ Feature: Target 'Search' test cases
   # Searching various products in Target website
 
   Scenario: User search for 'coffee'
-    Given Open target page
+    Given Open target main page
     When Search for coffee
     Then Verify the results shown is for coffee
 
   Scenario: User can search for 'tea'
-   # Given Open target page
+    Given Open target main page
     When Search for tea
     Then Verify the results shown is for tea
 

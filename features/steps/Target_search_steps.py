@@ -26,29 +26,31 @@ Add_cart = (By.CSS_SELECTOR, '[data-test="content-wrapper"] [id*="addToCartButto
 
 # open the url
 
-@given('Open target page')
+@given('Open target main page')
 def open_main_page(context):
     context.driver.get('https://www.target.com/')
-    #sleep(2)
-    context.driver.wait = WebDriverWait(context.driver, 10)
-    # context.driver.wait.until(
-    #     EC.element_to_be_clickable(search_field),
-    #     message='Search field not clickable'
-    # )
+    context.app.main_page.open_main_page()
+    #context.driver.wait = WebDriverWait(context.driver, 10)
+    context.driver.wait.until(
+        EC.element_to_be_clickable(search_field),
+        message='Search field not clickable'
+    )
 # @when('Search for {coffee}')
 # def search_product(context, coffee):
 #     context.driver.find_element(*search_field).send_keys(coffee)
 #     context.driver.find_element(*search_button).click()
 #     sleep(3)
 #
-# @then('Verify the results shown is for coffee')
-# def verify_results_shown(context):
-#     actual_results = context.driver.find_element(*search_result).text
-#     expected_results = 'coffee'
-#     assert expected_results in actual_results, f'Error, Text {expected_results} not found in {actual_results}'
-#
-# @then('Verify the results shown is for tea')
-# def verify_results_shown(context):
+@then('Verify the results shown is for coffee')
+def verify_results_shown(context):
+    actual_results = context.driver.find_element(*search_result).text
+    expected_results = 'coffee'
+    assert expected_results in actual_results, f'Error, Text {expected_results} not found in {actual_results}'
+
+@then('Verify the results shown is for {expected_results}')
+def verify_results_shown(context, expected_results):
+    context.app.search_results.verify_search_results(expected_results)
+
 #     actual_results = context.driver.find_element(*search_result).text
 #     expected_results = 'tea'
 #     assert expected_results in actual_results, f'Error, Text {expected_results} not found in {actual_results}'
@@ -61,13 +63,15 @@ def open_main_page(context):
 
 @when('Search for {search_word}')
 def search_product(context, search_word):
-    context.driver.find_element(*search_field).send_keys(search_word)
-    context.driver.find_element(*search_button).click()
-    context.driver.wait.until(
-        EC.presence_of_element_located(search_result),  # Wait for the results to load
-        message="Search results did not load properly"
-    )
-    #sleep(7)
+    context.app.header.search()
+    # context.driver.find_element(*search_field).send_keys(search_word)
+    # context.driver.find_element(*search_button).click()
+    # context.driver.wait.until(
+    #     EC.presence_of_element_located(search_result),  # Wait for the results to load
+    #     message="Search results did not load properly"
+    # )
+
+
 
 @when('Select an item to Add to cart')
 def select_item(context):
